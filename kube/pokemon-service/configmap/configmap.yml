@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pokemon-service-cm
-  namespace: default
-data:
-  .env: |-
-    HOST=""
-    PORT=8080
