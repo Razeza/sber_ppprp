@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: pokeapi-through-egress-gateway
+spec:
+  hosts:
+    - pokeapi.co
+  gateways:
+    - mesh
+    - pokeapi-egressgateway
+  tls:
+    - match:
+        - gateways:
+            - mesh
+          port: 443
+          sniHosts:
+            - pokeapi.co
+      route:
+        - destination:
+            host: istio-egressgateway.istio-system.svc.cluster.local
+            port:
+              number: 443
+    - match:
+        - gateways:
+            - pokeapi-egressgateway
+          port: 443
+          sniHosts:
+            - pokeapi.co
+      route:
+        - destination:
+            host: pokeapi.co
+            port:
+              number: 443
+          weight: 100
